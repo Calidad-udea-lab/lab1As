@@ -58,7 +58,6 @@ Sistema bancario que permite la gestión de clientes y transacciones financieras
 ```
 
 ## 📊 Características Técnicas
-
 - **Arquitectura RESTful** - API bien estructurada con endpoints claros
 - **CORS Configurado** - Permite comunicación entre dominios diferentes
 - **Responsive Design** - Adaptado para móviles, tablets y escritorio
