@@ -72,18 +72,18 @@ public class CustomerService {
         return customerMapper.toDto(requireCustomerByAccount(accountNumber));
     }
 
-    private com.udea.lab1As.entity.Customer requireCustomerById(Long id) {
+    private com.udea.lab1as.entity.Customer requireCustomerById(Long id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
     }
 
-    private com.udea.lab1As.entity.Customer requireCustomerByAccount(String accountNumber) {
+    private com.udea.lab1as.entity.Customer requireCustomerByAccount(String accountNumber) {
         return customerRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new CustomerNotFoundException(
                         "Customer not found with account number: " + accountNumber));
     }
 
-    private void applyCustomerUpdates(com.udea.lab1As.entity.Customer existingCustomer, CustomerDto customerDto) {
+    private void applyCustomerUpdates(com.udea.lab1as.entity.Customer existingCustomer, CustomerDto customerDto) {
         if (customerDto.getFirstName() != null) {
             existingCustomer.setFirstName(customerDto.getFirstName());
         }

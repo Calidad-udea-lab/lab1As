@@ -1,4 +1,4 @@
-package com.udea.lab1As.exception;
+package com.udea.lab1as.exception;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;

@@ -1,27 +1,25 @@
-package com.udea.lab1As.service;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+package com.udea.lab1as.service;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.udea.lab1As.dto.CustomerDto;
-import com.udea.lab1As.entity.Customer;
-import com.udea.lab1As.exception.CustomerNotFoundException;
-import com.udea.lab1As.mapper.CustomerMapper;
-import com.udea.lab1As.repository.CustomerRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.udea.lab1as.dto.CustomerDto;
+import com.udea.lab1as.entity.Customer;
+import com.udea.lab1as.exception.CustomerNotFoundException;
+import com.udea.lab1as.mapper.CustomerMapper;
+import com.udea.lab1as.repository.CustomerRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {

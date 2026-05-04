@@ -1,7 +1,6 @@
-package com.udea.lab1As.exception;
+package com.udea.lab1as.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
 class InvalidTransactionExceptionTest {

@@ -1,4 +1,4 @@
-package com.udea.lab1As.exception;
+package com.udea.lab1as.exception;
 
 public class CustomerNotFoundException extends RuntimeException {
 
