@@ -2,12 +2,15 @@ package com.udea.lab1As.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udea.lab1As.dto.CustomerDto;
+import com.udea.lab1As.exception.CustomerNotFoundException;
+import com.udea.lab1As.exception.GlobalExceptionHandler;
 import com.udea.lab1As.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
+@Import(GlobalExceptionHandler.class)
 class CustomerControllerTest {
 
     @Autowired
@@ -80,7 +84,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById_whenNotFound_shouldReturn404() throws Exception {
-        when(customerService.getCustomerById(99L)).thenThrow(new RuntimeException("Customer not found"));
+        when(customerService.getCustomerById(99L)).thenThrow(new CustomerNotFoundException("Customer not found"));
 
         mockMvc.perform(get("/api/customers/99"))
                 .andExpect(status().isNotFound());
@@ -186,7 +190,7 @@ class CustomerControllerTest {
     @Test
     void updateCustomer_whenNotFound_shouldReturn404() throws Exception {
         when(customerService.updateCustomer(eq(99L), any(CustomerDto.class)))
-                .thenThrow(new RuntimeException("Customer not found"));
+            .thenThrow(new CustomerNotFoundException("Customer not found"));
 
         mockMvc.perform(put("/api/customers/99")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -205,7 +209,7 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomer_whenNotFound_shouldReturn404() throws Exception {
-        doThrow(new RuntimeException("Customer not found")).when(customerService).deleteCustomer(99L);
+        doThrow(new CustomerNotFoundException("Customer not found")).when(customerService).deleteCustomer(99L);
 
         mockMvc.perform(delete("/api/customers/99"))
                 .andExpect(status().isNotFound());
@@ -225,7 +229,7 @@ class CustomerControllerTest {
     @Test
     void getCustomerByAccountNumber_whenNotFound_shouldReturn404() throws Exception {
         when(customerService.getCustomerByAccountNumber("UNKNOWN"))
-                .thenThrow(new RuntimeException("Customer not found"));
+            .thenThrow(new CustomerNotFoundException("Customer not found"));
 
         mockMvc.perform(get("/api/customers/account/UNKNOWN"))
                 .andExpect(status().isNotFound());

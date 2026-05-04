@@ -1,94 +1,91 @@
 package com.udea.lab1As.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.udea.lab1As.dto.TransactionDto;
+import com.udea.lab1As.entity.Customer;
 import com.udea.lab1As.entity.Transaction;
+import com.udea.lab1As.exception.CustomerNotFoundException;
+import com.udea.lab1As.exception.InsufficientFundsException;
+import com.udea.lab1As.exception.InvalidTransactionException;
+import com.udea.lab1As.mapper.TransactionMapper;
 import com.udea.lab1As.repository.CustomerRepository;
 import com.udea.lab1As.repository.TransactionRepository;
 
 @Service
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
+    private final CustomerRepository customerRepository;
+    private final TransactionMapper transactionMapper;
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    public TransactionService(TransactionRepository transactionRepository,
+            CustomerRepository customerRepository,
+            TransactionMapper transactionMapper) {
+        this.transactionRepository = transactionRepository;
+        this.customerRepository = customerRepository;
+        this.transactionMapper = transactionMapper;
+    }
 
     @Transactional // Si algo falla, todo se revierte (rollback)
     public TransactionDto transferMoney(TransactionDto transactionDto) {
-        // Lógica para transferir dinero entre cuentas
+        validateTransferRequest(transactionDto);
 
-        // validar que los  numeros de cuenta no sean nulos
-        if (transactionDto.getSenderAccountNumber() == null || 
-            transactionDto.getReceiverAccountNumber() == null) {
-            throw new IllegalArgumentException("Account numbers cannot be void");
-        }
+        var sender = getCustomerByAccount(transactionDto.getSenderAccountNumber(), "Sender account not found");
+        var receiver = getCustomerByAccount(transactionDto.getReceiverAccountNumber(), "Receiver account not found");
+        validateSufficientFunds(sender, transactionDto.getAmount());
 
-        // buscar los clientes por su numero de cuenta
-        var sender = customerRepository.findByAccountNumber(transactionDto.getSenderAccountNumber())
-                .orElseThrow(() -> new RuntimeException("Sender account not found"));
-        var receiver = customerRepository.findByAccountNumber(transactionDto.getReceiverAccountNumber())
-                .orElseThrow(() -> new RuntimeException("Receiver account not found"));
-
-        // validar que el monto de la transacción no sea nulo
-        if (transactionDto.getAmount() == null) {
-            throw new IllegalArgumentException("Transaction amount cannot be void");
-        }
-
-        // validar que el saldo del remitente sea suficiente
-        // compareTo devuelve un valor negativo si el primer valor es menor que el segundo
-        // cero si son iguales y un valor positivo si el primer valor es mayor que el segundo
-        if (sender.getBalance().compareTo(transactionDto.getAmount()) < 0) {
-            throw new IllegalArgumentException("Insufficient funds");
-        }
-
-        // actualizar los saldos de las cuentas
-        sender.setBalance(sender.getBalance() - transactionDto.getAmount()); // restar el monto de la transacción al saldo del remitente
-        receiver.setBalance(receiver.getBalance() + transactionDto.getAmount()); // sumar el monto de la transacción al saldo del receptor
-
-        // guardar la transacción en la base de datos
+        applyTransfer(sender, receiver, transactionDto.getAmount());
         customerRepository.save(sender);
         customerRepository.save(receiver);
 
-        // crear y guardar la transacción
-        var transaction =  new Transaction();
+        var transaction = transactionMapper.toEntity(transactionDto);
         transaction.setSenderAccountNumber(sender.getAccountNumber());
         transaction.setReceiverAccountNumber(receiver.getAccountNumber());
-        transaction.setAmount(transactionDto.getAmount());
-        transaction.setTransactionDate(transactionDto.getTransactionDate()); // GREGAR LA FECHA
-        transactionRepository.save(transaction);
 
-        // retornar la transacción como DTO
-        transactionDto = new TransactionDto();
-        transactionDto.setId(transaction.getId());
-        transactionDto.setSenderAccountNumber(transaction.getSenderAccountNumber());
-        transactionDto.setReceiverAccountNumber(transaction.getReceiverAccountNumber());
-        transactionDto.setAmount(transaction.getAmount());
-        transactionDto.setTransactionDate(transaction.getTransactionDate()); // AGREGAR LA FECHA
-
-        return transactionDto;
+        var savedTransaction = transactionRepository.save(transaction);
+        return transactionMapper.toDto(savedTransaction);
     }
 
     // obtener la lista de todas las transacciones por numero de cuenta
     public List<TransactionDto> getTransactionsByAccountNumber(String accountNumber) {
         List<Transaction> transactions = transactionRepository
                 .findBySenderAccountNumberOrReceiverAccountNumber(accountNumber, accountNumber);
-        return transactions.stream().map(transaction -> {
-            var dto = new TransactionDto();
-            dto.setId(transaction.getId());
-            dto.setSenderAccountNumber(transaction.getSenderAccountNumber());
-            dto.setReceiverAccountNumber(transaction.getReceiverAccountNumber());
-            dto.setAmount(transaction.getAmount());
-            dto.setTransactionDate(transaction.getTransactionDate()); //  AGREGAR LA FECHA
-            return dto;
-        }).collect(Collectors.toList());
+        return transactions.stream().map(transactionMapper::toDto).toList();
+    }
+
+    private void validateTransferRequest(TransactionDto transactionDto) {
+        if (transactionDto.getSenderAccountNumber() == null || transactionDto.getReceiverAccountNumber() == null) {
+            throw new InvalidTransactionException("Account numbers cannot be void");
+        }
+        if (transactionDto.getSenderAccountNumber().equals(transactionDto.getReceiverAccountNumber())) {
+            throw new InvalidTransactionException("Sender and receiver accounts must be different");
+        }
+        if (transactionDto.getAmount() == null || transactionDto.getAmount() <= 0) {
+            throw new InvalidTransactionException("Transaction amount must be greater than zero");
+        }
+        if (transactionDto.getTransactionDate() == null) {
+            throw new InvalidTransactionException("Transaction date is required");
+        }
+    }
+
+    private Customer getCustomerByAccount(String accountNumber, String notFoundMessage) {
+        return customerRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new CustomerNotFoundException(notFoundMessage));
+    }
+
+    private void validateSufficientFunds(Customer sender, Double amount) {
+        if (sender.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientFundsException("Insufficient funds");
+        }
+    }
+
+    private void applyTransfer(Customer sender, Customer receiver, Double amount) {
+        sender.setBalance(sender.getBalance() - amount);
+        receiver.setBalance(receiver.getBalance() + amount);
     }
 
 }

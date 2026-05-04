@@ -2,6 +2,7 @@ package com.udea.lab1As.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +29,15 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    // recursos HTTP ---> URL
+    // métodos HTTP ---> GET, POST, PUT, DELETE
+    // representación del recurso ---> JSON, XML; texto plano
+    // código de estado HTTP ---> 200 OK, 201 Created, 400 Bad Request, 404 Not
+    // Found, 500 Internal Server Error
+
+    // obtener todos los clientes
+    // GET /api/customers ---> obtener todos los clientes
+    @GetMapping // Maneja solicitudes GET a /api/customers
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
@@ -44,42 +53,29 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto) {
-        if (customerDto.getFirstName() == null || customerDto.getLastName() == null ||
-            customerDto.getAccountNumber() == null || customerDto.getBalance() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
         CustomerDto createdCustomer = customerService.createCustomer(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id, @RequestBody CustomerDto customerDto) {
-        try {
-            CustomerDto updatedCustomer = customerService.updateCustomer(id, customerDto);
-            return ResponseEntity.ok(updatedCustomer);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        CustomerDto updatedCustomer = customerService.updateCustomer(id, customerDto);
+        return ResponseEntity.ok(updatedCustomer);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        try {
-            customerService.deleteCustomer(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        customerService.deleteCustomer(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // obtener cliente por número de cuenta
+    // GET /api/customers/account/{accountNumber} ---> obtener cliente por número de
+    // cuenta
     @GetMapping("/account/{accountNumber}")
     public ResponseEntity<CustomerDto> getCustomerByAccountNumber(@PathVariable String accountNumber) {
-        try {
-            CustomerDto customer = customerService.getCustomerByAccountNumber(accountNumber);
-            return ResponseEntity.ok(customer);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        CustomerDto customer = customerService.getCustomerByAccountNumber(accountNumber);
+        return ResponseEntity.ok(customer);
     }
 }
