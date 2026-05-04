@@ -88,6 +88,7 @@ class GlobalExceptionHandlerTest {
     private static class DummyController {
         @SuppressWarnings("unused")
         public void create(CustomerDto customerDto) {
+            // Intentionally empty - used only to extract MethodParameter for testing MethodArgumentNotValidException
         }
     }
 }
