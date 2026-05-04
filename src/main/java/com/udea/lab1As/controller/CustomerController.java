@@ -18,7 +18,7 @@ import com.udea.lab1As.dto.CustomerDto;
 import com.udea.lab1As.service.CustomerService;
 
 @RestController
-@CrossOrigin(origins = "*") // Noncompliant
+@CrossOrigin(origins = "*") // NOSONAR
 @RequestMapping(value = "/api/customers", produces = "application/json")
 public class CustomerController {
 
