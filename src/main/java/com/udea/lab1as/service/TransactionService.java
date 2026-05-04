@@ -30,7 +30,7 @@ public class TransactionService {
         this.transactionMapper = transactionMapper;
     }
 
-    @Transactional // Si algo falla, todo se revierte (rollback)
+    @Transactional // Si algo falla, se revierte (rollback)
     public TransactionDto transferMoney(TransactionDto transactionDto) {
         validateTransferRequest(transactionDto);
 
