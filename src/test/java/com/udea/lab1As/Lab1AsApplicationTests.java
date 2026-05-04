@@ -1,4 +1,4 @@
-package com.udea.lab1As;
+package com.udea.lab1as;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.udea.lab1As.controller;
+package com.udea.lab1as.controller;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.udea.lab1As.dto.TransactionDto;
-import com.udea.lab1As.service.TransactionService;
+import com.udea.lab1as.dto.TransactionDto;
+import com.udea.lab1as.service.TransactionService;
 
 @RestController
 @CrossOrigin(origins = "*") // Permitir CORS desde cualquier origen

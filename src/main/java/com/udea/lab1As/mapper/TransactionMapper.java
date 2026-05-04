@@ -1,10 +1,10 @@
-package com.udea.lab1As.mapper;
+package com.udea.lab1as.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.udea.lab1As.dto.TransactionDto;
-import com.udea.lab1As.entity.Transaction;
+import com.udea.lab1as.dto.TransactionDto;
+import com.udea.lab1as.entity.Transaction;
 
 @Mapper(componentModel = "spring") // para que Spring gestione el mapper
 public interface TransactionMapper {

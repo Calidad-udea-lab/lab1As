@@ -1,14 +1,14 @@
-package com.udea.lab1As.service;
+package com.udea.lab1as.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.udea.lab1As.dto.CustomerDto;
-import com.udea.lab1As.exception.CustomerNotFoundException;
-import com.udea.lab1As.mapper.CustomerMapper;
-import com.udea.lab1As.repository.CustomerRepository;
+import com.udea.lab1as.dto.CustomerDto;
+import com.udea.lab1as.exception.CustomerNotFoundException;
+import com.udea.lab1as.mapper.CustomerMapper;
+import com.udea.lab1as.repository.CustomerRepository;
 
 @Service
 public class CustomerService {

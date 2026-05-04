@@ -1,11 +1,11 @@
-package com.udea.lab1As.repository;
+package com.udea.lab1as.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.udea.lab1As.entity.Transaction;
+import com.udea.lab1as.entity.Transaction;
 
 
 @Repository

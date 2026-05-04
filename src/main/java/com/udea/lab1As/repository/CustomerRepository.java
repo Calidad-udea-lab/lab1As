@@ -1,10 +1,10 @@
-package com.udea.lab1As.repository;
+package com.udea.lab1as.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.udea.lab1As.entity.Customer;
+import com.udea.lab1as.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // JpaRepository proporciona métodos CRUD y de paginación

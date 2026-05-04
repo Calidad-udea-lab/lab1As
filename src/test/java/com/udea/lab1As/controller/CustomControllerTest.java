@@ -1,10 +1,10 @@
-package com.udea.lab1As.controller;
+package com.udea.lab1as.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.udea.lab1As.dto.CustomerDto;
-import com.udea.lab1As.exception.CustomerNotFoundException;
-import com.udea.lab1As.exception.GlobalExceptionHandler;
-import com.udea.lab1As.service.CustomerService;
+import com.udea.lab1as.dto.CustomerDto;
+import com.udea.lab1as.exception.CustomerNotFoundException;
+import com.udea.lab1as.exception.GlobalExceptionHandler;
+import com.udea.lab1as.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

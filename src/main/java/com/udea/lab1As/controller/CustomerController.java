@@ -1,4 +1,4 @@
-package com.udea.lab1As.controller;
+package com.udea.lab1as.controller;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.udea.lab1As.dto.CustomerDto;
-import com.udea.lab1As.service.CustomerService;
+import com.udea.lab1as.dto.CustomerDto;
+import com.udea.lab1as.service.CustomerService;
 
 @RestController
 @CrossOrigin(origins = "*") // NOSONAR

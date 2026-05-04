@@ -1,4 +1,4 @@
-package com.udea.lab1As;
+package com.udea.lab1as;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +17,7 @@ public class Lab1AsApplication {
 				.load();
 		
 		// Establecer las variables como propiedades del sistema
-		dotenv.entries().forEach(entry -> {
-			System.setProperty(entry.getKey(), entry.getValue());
-		});
+		dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
 		
 		SpringApplication.run(Lab1AsApplication.class, args);
 	}

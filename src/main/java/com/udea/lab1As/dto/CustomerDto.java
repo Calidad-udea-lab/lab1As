@@ -1,4 +1,4 @@
-package com.udea.lab1As.dto;
+package com.udea.lab1as.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
