@@ -2,10 +2,8 @@ package com.udea.lab1as.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.udea.lab1as.dto.TransactionDto;
 import com.udea.lab1as.service.TransactionService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@CrossOrigin(origins = "*") // Permitir CORS desde cualquier origen
 @RequestMapping(value = "/api/transactions", produces = "application/json")
 public class TransactionController {
 

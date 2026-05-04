@@ -14,17 +14,23 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") // Permitir todos los orígenes por ahora
+            .allowedOriginPatterns(
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "https://lab1-as.vercel.app"
+            )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(false) // Cambiar a false para evitar problemas
+            .allowCredentials(false)
                 .maxAge(3600);
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*"); // Permitir todos los orígenes
+        configuration.addAllowedOriginPattern("http://localhost:3000");
+        configuration.addAllowedOriginPattern("http://127.0.0.1:3000");
+        configuration.addAllowedOriginPattern("https://lab1-as.vercel.app");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(false);
