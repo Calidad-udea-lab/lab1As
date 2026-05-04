@@ -1,30 +1,40 @@
 package com.udea.lab1as.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.udea.lab1as.dto.CustomerDto;
-import com.udea.lab1as.exception.CustomerNotFoundException;
-import com.udea.lab1as.exception.GlobalExceptionHandler;
-import com.udea.lab1as.service.CustomerService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CustomerController.class)
-@Import(GlobalExceptionHandler.class)
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.udea.lab1as.dto.CustomerDto;
+import com.udea.lab1as.exception.CustomerNotFoundException;
+import com.udea.lab1as.service.CustomerService;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
 
     @Autowired
@@ -33,7 +43,10 @@ class CustomerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
+    private CustomerController customerController;
+
+    @Mock
     private CustomerService customerService;
 
     private CustomerDto customerDto;
@@ -41,6 +54,9 @@ class CustomerControllerTest {
 
     @BeforeEach
     void setUp() {
+        // Inyectar el mock de Mockito en el controlador
+        ReflectionTestUtils.setField(customerController, "customerService", customerService);
+
         customerDto = new CustomerDto();
         customerDto.setId(1L);
         customerDto.setFirstName("John");
